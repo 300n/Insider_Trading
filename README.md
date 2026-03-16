@@ -4,7 +4,7 @@ A machine learning system for detecting insider trading patterns in financial ma
 
 ## Overview
 
-Insider trading — the buying or selling of securities based on material, non-public information — is difficult to detect through manual analysis alone due to the volume and complexity of market data. This project automates the detection process by applying machine learning models to identify statistically anomalous trading behavior that may indicate illicit activity.
+Insider trading — the buying or selling of securities based on material, non-public information — is difficult to detect through manual analysis alone due to the volume and complexity of market data. This project automates the detection process by applying machine learning models to identify statistically anomalous trading behavior that may indicate il   licit activity.a
 
 ## Goals
 
