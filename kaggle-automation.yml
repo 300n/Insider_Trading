@@ -1,0 +1,40 @@
+name: Fetch and Merge Crypto Data
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  fetch-and-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv with Python 3.12
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+          enable-cache: true
+
+      - name: Create virtual environment
+        run: uv venv
+
+      - name: Install dependencies
+        run: uv pip install -e .
+
+      - name: Setup Kaggle API
+        run: |
+          mkdir -p $HOME/.kaggle
+          echo '{"username":"${{ secrets.KAGGLE_USERNAME }}","key":"${{ secrets.KAGGLE_KEY }}"}' > $HOME/.kaggle/kaggle.json
+          chmod 600 $HOME/.kaggle/kaggle.json
+
+      - name: Run data processing script
+        run: uv run python kaggle_bitcoin/kaggle_update_bitcoin.py
+
+      - name: Upload data to Kaggle
+        run: |
+          utc_date=$(date -u +"%Y-%m-%d")
+          uv run kaggle datasets version -m "Automated daily update for $utc_date" -p ./upload --dir-mode zip
